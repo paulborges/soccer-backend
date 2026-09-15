@@ -11,3 +11,26 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  username String @unique
+  email String @unique
+  passwordHash String
+  createdAt DateTime @default(now())
+  matchLogs MatchLog[]
+}
+
+model MatchLog {
+  id Int @id @default(autoincrement())
+  userID Int
+  user User @relation(fields: [userID], references: [id])
+  playedAt DateTime @default(now())
+  result String
+  goalsFor Int
+  goalsAgainst Int
+  shotsTaken Int
+  passesMade Int
+  dribbleCount Int
+  tackleCount Int
+}
