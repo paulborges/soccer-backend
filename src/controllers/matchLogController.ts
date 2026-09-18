@@ -4,7 +4,7 @@ import prisma from "../lib/prisma";
 import { Request,Response } from "express";
 
 
-async function createMatchLog(req: Request, res: Response) {
+export async function createMatchLog(req: Request, res: Response) {
     const matchLogSchema = z.object({
         result: z.enum(["WIN","LOSS","DRAW"]),
         goalsFor: z.number().int().min(0),
@@ -32,3 +32,14 @@ async function createMatchLog(req: Request, res: Response) {
 
     return res.status(201).json({matchLog});
 }
+
+export async function getMatchLog(req: Request, res: Response) {
+    const userID = req.user!.userID;
+    const matchLogs = await prisma.matchLog.findMany({
+        where: {userID},
+        orderBy: {playedAt: "desc"},
+    });
+
+    return res.json({matchLogs});
+}
+
