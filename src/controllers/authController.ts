@@ -45,3 +45,40 @@ export async function signUp (req: Request, res: Response) {
 
     return res.status(201).json({user:newUser,token});
 }
+
+export async function login (req: Request, res: Response) {
+    const loginSchema = z.object({
+        username: z.string().min(3),
+        password: z.string().min(5),
+    });
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success){
+        return res.status(400).json({error: parsed.error.flatten()});
+    }
+
+    const {username,password} = parsed.data;
+
+    const existingUser = await prisma.user.findFirst({
+        where: {username},
+    });
+
+    if (!existingUser) {
+        return res.status(401).json({error:"Invalid username or password"});
+    }
+
+    const valpassword = await bcrypt.compare(password,existingUser.passwordHash)
+    
+    
+
+    if (!valpassword){
+        return res.status(401).json({error:"Invalid username or password"});
+    }
+    else{
+        const token = jwt.sign(
+        {userId:existingUser.id,username:existingUser.username},
+        process.env.JWT_SECRET as string,
+        {expiresIn:"7d"}
+    );
+        return res.status(200).json({id:existingUser.id,user:existingUser.username,email: existingUser.email,token});
+    }
+}
