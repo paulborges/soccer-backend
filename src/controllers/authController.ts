@@ -38,7 +38,7 @@ export async function signUp (req: Request, res: Response) {
     });
 
     const token = jwt.sign(
-        {userId:newUser.id,username:newUser.username},
+        {userID:newUser.id,username:newUser.username},
         process.env.JWT_SECRET as string,
         {expiresIn:"7d"}
     );
@@ -75,7 +75,7 @@ export async function login (req: Request, res: Response) {
     }
     else{
         const token = jwt.sign(
-        {userId:existingUser.id,username:existingUser.username},
+        {userID:existingUser.id,username:existingUser.username},
         process.env.JWT_SECRET as string,
         {expiresIn:"7d"}
     );
