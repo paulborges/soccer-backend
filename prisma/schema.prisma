@@ -10,7 +10,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url = env("DATABASE_URL")
 }
+
+enum Position {GK LB LCB CB RCB RB CDM LDM RDM LCM RCM CM LAM RAM CAM RM LM RW LW ST CF}
 
 model User {
   id Int @id @default(autoincrement())
@@ -33,4 +36,53 @@ model MatchLog {
   passesMade Int
   dribbleCount Int
   tackleCount Int
+}
+
+
+model ShotEvent{
+  id Int @id @default(autoincrement())
+  matchLogID Int
+  matchLog MatchLog @relation(fields:[matchLogID], references: [id])
+  position String
+  timestamp Int
+  positionX Float
+  positionY Float
+  targetX Float
+  targetY Float
+  onTarget Boolean
+  scored Boolean
+}
+
+model PassEvent{
+  id Int @id @default(autoincrement())
+  matchLogID Int
+  matchLog MatchLog @relation(fields:[matchLogID], references: [id])
+  position Position
+  timestamp Int
+  fromX Float
+  fromY Float
+  toX Float
+  toY Float
+  completed Boolean
+}
+
+model TackleEvent{
+  id Int @id @default(autoincrement())
+  matchLogID Int
+  matchLog MatchLog @relation(fields:[matchLogID], references: [id])
+  position String
+  timestamp Int
+  positionX Float
+  positionY Float
+  successful Boolean
+}
+
+model PositionSnapshot{
+  id Int @id @default(autoincrement())
+  matchLogID Int
+  matchLog MatchLog @relation(fields:[matchLogID], references: [id])
+  position String
+  timestamp Int
+  positionX Float
+  positionY Float
 }
