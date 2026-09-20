@@ -36,6 +36,10 @@ model MatchLog {
   passesMade Int
   dribbleCount Int
   tackleCount Int
+  shotEvents ShotEvent[]
+  passEvents PassEvent[]
+  tackleEvents TackleEvent[]
+  positionSnapshots PositionSnapshot[]
 }
 
 
@@ -43,7 +47,7 @@ model ShotEvent{
   id Int @id @default(autoincrement())
   matchLogID Int
   matchLog MatchLog @relation(fields:[matchLogID], references: [id])
-  position String
+  position Position
   timestamp Int
   positionX Float
   positionY Float
@@ -70,7 +74,7 @@ model TackleEvent{
   id Int @id @default(autoincrement())
   matchLogID Int
   matchLog MatchLog @relation(fields:[matchLogID], references: [id])
-  position String
+  position Position
   timestamp Int
   positionX Float
   positionY Float
@@ -81,7 +85,7 @@ model PositionSnapshot{
   id Int @id @default(autoincrement())
   matchLogID Int
   matchLog MatchLog @relation(fields:[matchLogID], references: [id])
-  position String
+  position Position
   timestamp Int
   positionX Float
   positionY Float
