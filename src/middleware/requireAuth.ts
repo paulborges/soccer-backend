@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request,Response } from "express";
-import { AuthPayload } from "../types/express";
+import type { AuthPayload } from "../types/express";
 
 
 export async function authentication (req: Request, res: Response, next: NextFunction) {
